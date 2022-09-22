@@ -35,3 +35,23 @@ $ git commit -m "UPDATED estructura del proyecto"
 ```bash
 $ git push -u origin main
 ```
+
+## Comando para instalar los requirements (librerias)
+```bash
+$ pip3 install -r requirements.txt
+```
+
+## Mostrar las librerias usadas y sus versiones
+```bash
+$ pip3 freeze
+```
+
+## Tuberia >< (Redireccionar la salida de un parámetro a otro)
+```bash
+$ pip3 freeze > requirements.txt
+```
+
+## Exporta el script y crea una nueva db
+```bash
+$ sqlite3 base.db < base.sql
+```
