@@ -55,3 +55,18 @@ $ pip3 freeze > requirements.txt
 ```bash
 $ sqlite3 base.db < base.sql
 ```
+
+## Decarga los cambios que se hicieron desde github
+```bash
+$ git pull
+```
+
+## Forza las actualizaciones de la máquina en github (WARNING)
+```bash
+$ git push -f origin main
+```
+
+## Junta los cambios de varios lados y genera una nueva actualización
+```bash
+$ git merge
+```
