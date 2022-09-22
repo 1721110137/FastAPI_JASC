@@ -66,7 +66,7 @@ $ git pull
 $ git push -f origin main
 ```
 
-## Junta los cambios de varios lados y genera una nueva actualización
+## Junta los cambios de ambas versoines y genera una nueva actualización
 ```bash
 $ git merge
 ```
