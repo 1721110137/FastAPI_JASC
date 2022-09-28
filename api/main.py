@@ -62,7 +62,7 @@ async def get_contactos():
             return response
     
     except Exception as error:
-        print("Error en get_contactos {error.args}")
+        print(f"Error en get_contactos {error.args}")
         raise HTTPException(
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Error al consultar los datos"
