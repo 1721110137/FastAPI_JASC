@@ -1,8 +1,5 @@
-CREATE DATABASE contactos;
-USE contactos;
-
 CREATE TABLE contactos(
-    id_contacto INTEGER AUTOINCREMENT,
+    id_contacto INTEGER primary key AUTOINCREMENT,
     nombre VARCHAR(50),
     email VARCHAR(50),
     telefono VARCHAR(50)
