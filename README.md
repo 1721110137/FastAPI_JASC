@@ -70,3 +70,8 @@ $ git push -f origin main
 ```bash
 $ git merge
 ```
+
+## Línea para ejecutar la API.
+```bash
+$ python3 -m uvicorn api.main:app --reload
+```
