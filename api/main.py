@@ -2,7 +2,9 @@ from fastapi import FastAPI
 import sqlite3
 from typing import List
 from pydantic import BaseModel
-from fastapi import HTTPException, status
+from pydantic import EmailStr
+from fastapi import HTTPException
+from fastapi import status
 
 class mensaje (BaseModel):
     mensaje: str()
@@ -10,7 +12,7 @@ class mensaje (BaseModel):
 class contactos (BaseModel):
     id_contacto: int()
     nombre: str()
-    email: str()
+    email: EmailStr()
     telefono: str()
 
 class contactosIN (BaseModel):
@@ -28,8 +30,12 @@ app = FastAPI(
     title = "Contactos API REST",
     description = description,
     version = "0.1",
-    contact = {"name" : "Alfredo Cuellar",
-    "email" : "1721110137@utectulancingo.edu.mx"}
+    terms_of_serice="http://example.com/terms/",
+    contact = {
+    "name" : "Alfredo Cuellar",
+    "email" : "1721110137@utectulancingo.edu.mx",
+    "url": "https://github.com/1721110137"
+    }
 )
 
 @app.get(
