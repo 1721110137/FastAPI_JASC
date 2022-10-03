@@ -47,16 +47,20 @@ app = FastAPI(
 )
 
 async def read_root():
-    response = {"mensaje" : "version 0.1"}
+    response = {"mensaje" : "Hola"}
     return response
 
 @app.get(
-    "/contactos/",
+    "/contactos/{id_contacto}",
     response_model = List[Contactos],
     status_code = status.HTTP_202_ACCEPTED,
     summary = "Lista de contactos",
     description = "Endpoint que regresa un array con todos los contactos"
 )
+
+async def read_root():
+    response = {"mensaje" : "Contactos"}
+    return response
 
 async def get_contactos():
     try:
