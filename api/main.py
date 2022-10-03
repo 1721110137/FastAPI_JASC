@@ -29,7 +29,7 @@ description: """
 app = FastAPI(
     title = "Contactos API REST",
     description = description,
-    version = "0.1",
+    version = "0.0.1",
     terms_of_serice="http://example.com/terms/",
     contact = {
     "name" : "Alfredo Cuellar",
@@ -52,7 +52,7 @@ async def read_root():
 
 @app.get(
     "/contactos/",
-    response_model = List [contactos],
+    response_model = List[contactos],
     status_code = status.HTTP_202_ACCEPTED,
     summary = "Lista de contactos",
     description = "Endpoint que regresa un array con todos los contactos"
@@ -68,7 +68,7 @@ async def get_contactos():
             return response
     
     except Exception as error:
-        print(f"Error en get_contactos {error.args}")
+        print(f"Error en get_contactos{error.args}")
         raise HTTPException(
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Error al consultar los datos"
