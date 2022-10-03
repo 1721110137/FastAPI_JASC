@@ -6,21 +6,21 @@ from pydantic import EmailStr
 from fastapi import HTTPException
 from fastapi import status
 
-class mensaje (BaseModel):
-    mensaje: str()
+class Mensaje (BaseModel):
+    mensaje: str
 
-class contactos (BaseModel):
-    id_contacto: int()
-    nombre: str()
-    email: EmailStr()
-    telefono: str()
+class Contactos (BaseModel):
+    id_contacto: int
+    nombre: str
+    email: EmailStr
+    telefono: str
 
-class contactosIN (BaseModel):
-    nombre: str()
-    email: str()
-    telefono: str()
+class ContactosIN (BaseModel):
+    nombre: str
+    email: str
+    telefono: str
 
-description: """
+description = """
     #Contactos API REST
     Api para crear un CRUD
     de la tabla contactos
@@ -40,7 +40,7 @@ app = FastAPI(
 
 @app.get(
     "/",
-    response_model = mensaje,
+    response_model = Mensaje,
     status_code = status.HTTP_202_ACCEPTED,
     summary = "Endpoint principal",
     description = "Regresa un mensaje de Bienvenida"
@@ -52,7 +52,7 @@ async def read_root():
 
 @app.get(
     "/contactos/",
-    response_model = List[contactos],
+    response_model = List[Contactos],
     status_code = status.HTTP_202_ACCEPTED,
     summary = "Lista de contactos",
     description = "Endpoint que regresa un array con todos los contactos"
@@ -64,7 +64,7 @@ async def get_contactos():
             connection.row_factory = sqlite3.Row()
             cursor = connection.cursor()
             cursor.execute("SELECT id_contacto, nombre, email, telefono FROM contactos;")
-            response = cursor.fetchall()
+            response = cursor.fetchall() ## Fetchall devuelve un arreglo
             return response
     
     except Exception as error:
