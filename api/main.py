@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 import sqlite3
 from typing import List
 from pydantic import BaseModel
@@ -6,23 +6,23 @@ from pydantic import EmailStr
 from fastapi import HTTPException
 from fastapi import status
 
-class Mensaje (BaseModel):
+class Mensaje(BaseModel):
     mensaje: str
 
-class Contactos (BaseModel):
+class Contacto(BaseModel):
     id_contacto: int
     nombre: str
     email: EmailStr
     telefono: str
 
-class ContactosIN (BaseModel):
+class ContactoIN(BaseModel):
     nombre: str
     email: str
     telefono: str
 
 description = """
     #Contactos API REST
-    Api para crear un CRUD
+    API para crear un CRUD
     de la tabla contactos
     """
 
@@ -47,25 +47,21 @@ app = FastAPI(
 )
 
 async def read_root():
-    response = {"mensaje" : "Hola"}
+    response = {"mensaje" : "Si funciona"}
     return response
 
 @app.get(
-    "/contactos/{id_contacto}",
-    response_model = List[Contactos],
+    "/contactos/",
+    response_model = List[Contacto],
     status_code = status.HTTP_202_ACCEPTED,
     summary = "Lista de contactos",
     description = "Endpoint que regresa un array con todos los contactos"
 )
 
-async def read_root():
-    response = {"mensaje" : "Contactos"}
-    return response
-
 async def get_contactos():
     try:
         with sqlite3.connect("api/sql/contactos.db") as connection:
-            connection.row_factory = sqlite3.Row()
+            connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
             cursor.execute("SELECT id_contacto, nombre, email, telefono FROM contactos;")
             response = cursor.fetchall() ## Fetchall devuelve un arreglo
@@ -77,3 +73,29 @@ async def get_contactos():
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Error al consultar los datos"
         )
+
+@app.get(
+    "/contactos/{id_contacto}",
+    response_model = Contacto,
+    status_code = status.HTTP_202_ACCEPTED,
+    summary = "Id de un contacto",
+    description = "Endpoint para seleccionar el ID de un contacto"
+)
+
+async def get_contacto_id(id_contacto: int):
+    try:
+        with sqlite3.connect("api/sql/contactos.db") as connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            query=("SELECT id_contacto, nombre, email, telefono FROM contactos WHERE id_contacto= ?;")
+            values=(id_contacto,)
+            cursor.execute(query,values)
+            response = cursor.fetchone()
+            return response
+    
+    except Exception as error:
+        print(f"Error en get_contacto_id{error.args}")
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail = "Error al consultar el ID"
+)
