@@ -17,13 +17,11 @@ class Contacto(BaseModel):
 
 class ContactoIN(BaseModel):
     nombre: str
-    email: str
+    email: EmailStr
     telefono: str
 
 description = """
-    #Contactos API REST
-    API para crear un CRUD
-    de la tabla contactos
+API_REST para realizar un CRUD en la base de datos "Contactos".
     """
 
 app = FastAPI(
@@ -32,12 +30,12 @@ app = FastAPI(
     version = "0.0.1",
     terms_of_serice="http://example.com/terms/",
     contact = {
-    "name" : "Alfredo Cuellar",
+    "name" : "José Alfredo Sorcia Cuellar",
     "email" : "1721110137@utectulancingo.edu.mx",
     "url": "https://github.com/1721110137"
     }
 )
-
+## ----------------------------------------------------------------------------------------------------------------------- ##
 @app.get(
     "/",
     response_model = Mensaje,
@@ -49,7 +47,7 @@ app = FastAPI(
 async def read_root():
     response = {"mensaje" : "Si funciona"}
     return response
-
+## ----------------------------------------------------------------------------------------------------------------------- ##
 @app.get(
     "/contactos/",
     response_model = List[Contacto],
@@ -73,7 +71,7 @@ async def get_contactos():
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Error al consultar los datos"
         )
-
+## ----------------------------------------------------------------------------------------------------------------------- ##
 @app.get(
     "/contactos/{id_contacto}",
     response_model = Contacto,
@@ -99,3 +97,39 @@ async def get_contacto_id(id_contacto: int):
             status_code = status.HTTP_400_BAD_REQUEST,
             detail = "Error al consultar el ID"
 )
+## ----------------------------------------------------------------------------------------------------------------------- ##
+@app.post(
+   "/contactos/",
+    response_model = Mensaje,
+    status_code = status.HTTP_202_ACCEPTED,
+    summary = "Insertar un nuevo registro",
+    description = "Endpoint para ingresar un nuevo registro"
+)
+
+def post_contacto(contacto:ContactoIN):
+    print(f"Nombre:{contacto.nombre}")
+    #codigo para insertar
+    try:
+        with sqlite3.connect("api/sql/contactos.db") as connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            consult = "SELECT email FROM contactos;"
+            email_existent = cursor.fetchall()
+            print(email_existent)
+            if contacto.email in email_existent:
+                response = {"mensaje": "Email existente, ingrese otro."}
+                return response
+            else:
+                query="INSERT INTO contactos (nombre, email, telefono) VALUES (?, ?, ?);"
+                values=(contacto.nombre, contacto.email, contacto.telefono)
+                cursor.execute(query,values)
+                response = {"mensaje": "Contacto registrado con exito."}
+                return response
+
+    except Exception as error:
+        print(f"Error al ingresar un nuevo contacto{error.args}")
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail = "Error al insertar registro"
+)
+## ----------------------------------------------------------------------------------------------------------------------- ##
